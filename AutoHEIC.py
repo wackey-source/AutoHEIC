@@ -55,23 +55,30 @@ def convert(path):
 
         img = Image.open(path)
 
-# Ridimensiona se necessario
-	if img.width > MAX_WIDTH:
-    	ratio = MAX_WIDTH / img.width
-    	new_height = int(img.height * ratio)
-    	img = img.resize((MAX_WIDTH, new_height), Image.Resampling.LANCZOS)
+        # Ridimensiona se troppo grande
+        MAX_WIDTH = 2048
 
-        ext = ".jpg"
+        if img.width > MAX_WIDTH:
+            ratio = MAX_WIDTH / img.width
+            new_height = int(img.height * ratio)
+            img = img.resize(
+                (MAX_WIDTH, new_height),
+                Image.Resampling.LANCZOS
+            )
 
-        if output_format == "PNG":
-            ext = ".png"
+        output = os.path.splitext(path)[0] + ".jpg"
 
-        output = os.path.splitext(path)[0] + ext
+        # Non sovrascrivere un JPG già esistente
+        if os.path.exists(output):
+            print("JPG già presente, conversione saltata.")
+            return
 
-        if output_format == "JPEG":
-            img.convert("RGB").save(output, "JPEG", quality=quality)
-        else:
-            img.save(output, output_format)
+        img.convert("RGB").save(
+            output,
+            "JPEG",
+            quality=85,
+            optimize=True
+        )
 
         print("Creato:", output)
 
@@ -80,6 +87,7 @@ def convert(path):
             print("HEIC eliminato")
 
     except Exception as e:
+
         print("Errore:", e)
 
 
