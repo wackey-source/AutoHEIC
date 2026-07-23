@@ -1,0 +1,6 @@
+{
+    "watch_folder": "/home/marco/Downloads",
+    "output_format": "JPEG",
+    "delete_original": true,
+    "quality": 95
+}

@@ -1,0 +1,19 @@
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Build
+build/
+dist/
+*.spec
+
+# Log
+logs/
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
