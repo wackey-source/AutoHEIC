@@ -40,6 +40,7 @@ watch_folder = cfg["watch_folder"]
 output_format = cfg["output_format"].upper()
 delete_original = cfg["delete_original"]
 quality = cfg["quality"]
+MAX_WIDTH = 2048
 
 
 # -------------------------
@@ -53,6 +54,12 @@ def convert(path):
         print(f"Conversione: {os.path.basename(path)}")
 
         img = Image.open(path)
+
+# Ridimensiona se necessario
+	if img.width > MAX_WIDTH:
+    	ratio = MAX_WIDTH / img.width
+    	new_height = int(img.height * ratio)
+    	img = img.resize((MAX_WIDTH, new_height), Image.Resampling.LANCZOS)
 
         ext = ".jpg"
 
