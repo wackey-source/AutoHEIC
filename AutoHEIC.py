@@ -1,4 +1,7 @@
 import time
+import platform
+
+from modules.tray import start_tray
 
 from pillow_heif import register_heif_opener
 
@@ -9,6 +12,8 @@ from modules.watcher import (
     create_observer,
 )
 
+if platform.system() == "Windows":
+    start_tray()
 
 def main():
 
