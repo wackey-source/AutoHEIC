@@ -2,6 +2,7 @@ import time
 import platform
 
 from modules.tray import start_tray
+from modules.app_state import set_config
 
 from pillow_heif import register_heif_opener
 
@@ -12,9 +13,6 @@ from modules.watcher import (
     create_observer,
 )
 
-if platform.system() == "Windows":
-    start_tray()
-
 def main():
 
     register_heif_opener()
@@ -22,6 +20,10 @@ def main():
     logger.info("========== Avvio AutoHEIC ==========")
 
     cfg = load_config()
+    set_config(cfg)
+
+if platform.system() == "Windows":
+    start_tray()
 
     watch_folder = cfg["watch_folder"]
     delete_original = cfg["delete_original"]
