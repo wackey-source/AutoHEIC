@@ -3,7 +3,7 @@ import platform
 import threading
 
 import pystray
-from PIL import Image, ImageDraw
+from PIL import Image
 from pystray import MenuItem as Item
 
 from modules.app_state import get_config
@@ -11,14 +11,15 @@ from modules.log_manager import logger
 from modules.watcher import convert_existing_files
 
 
-def create_icon():
-    image = Image.new("RGB", (64, 64), "white")
-    draw = ImageDraw.Draw(image)
+ICON_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)),
+    "icons",
+    "autoheic.ico",
+)
 
-    draw.rectangle((8, 8, 56, 56), fill="#4CAF50", outline="black")
-    draw.rectangle((18, 18, 46, 46), fill="white")
 
-    return image
+def load_icon():
+    return Image.open(ICON_PATH)
 
 
 def open_downloads():
@@ -55,20 +56,17 @@ def exit_app(icon):
 
 
 def start_tray():
-
-    menu = pystray.Menu(
-        Item("Apri Downloads", lambda icon, item: open_downloads()),
-        Item("Apri log", lambda icon, item: open_log()),
-        Item("Converti file esistenti", lambda icon, item: convert_now()),
-        pystray.Menu.SEPARATOR,
-        Item("Esci", lambda icon, item: exit_app(icon)),
-    )
-
     icon = pystray.Icon(
         "AutoHEIC",
-        create_icon(),
+        load_icon(),
         "AutoHEIC",
-        menu,
+        menu=pystray.Menu(
+            Item("Apri Downloads", lambda icon, item: open_downloads()),
+            Item("Apri log", lambda icon, item: open_log()),
+            Item("Converti file esistenti", lambda icon, item: convert_now()),
+            pystray.Menu.SEPARATOR,
+            Item("Esci", lambda icon, item: exit_app(icon)),
+        ),
     )
 
     threading.Thread(target=icon.run, daemon=True).start()
