@@ -1,18 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
 # Virtual environment
 .venv/
 
-# Python
-__pycache__/
-*.pyc
+# Logs
+logs/*.log
 
 # Build
 build/
 dist/
+
+# PyInstaller
 *.spec
 
-# Log
-logs/
-*.log
+# IDE
+.vscode/
+.idea/
 
 # Sistema
 .DS_Store
