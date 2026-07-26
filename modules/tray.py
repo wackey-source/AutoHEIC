@@ -1,13 +1,14 @@
 import os
 import platform
-import subprocess
 import threading
 
 import pystray
 from PIL import Image, ImageDraw
 from pystray import MenuItem as Item
 
+from modules.app_state import get_config
 from modules.log_manager import logger
+from modules.watcher import convert_existing_files
 
 
 def create_icon():
@@ -21,21 +22,30 @@ def create_icon():
 
 
 def open_downloads():
-    path = os.path.expanduser("~/Downloads")
-
     if platform.system() == "Windows":
-        os.startfile(path)
+        os.startfile(os.path.expanduser("~/Downloads"))
 
 
 def open_log():
-    log_file = os.path.abspath("logs/autoheic.log")
-
     if platform.system() == "Windows":
-        os.startfile(log_file)
+        os.startfile(os.path.abspath("logs/autoheic.log"))
 
 
 def convert_now():
+    cfg = get_config()
+
+    if not cfg:
+        logger.warning("Configurazione non disponibile.")
+        return
+
     logger.info("Conversione manuale richiesta dalla tray.")
+
+    convert_existing_files(
+        cfg["watch_folder"],
+        cfg["quality"],
+        cfg["delete_original"],
+        cfg["max_width"],
+    )
 
 
 def exit_app(icon):
