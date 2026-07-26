@@ -41,8 +41,6 @@ def main():
 
     observer.start()
 
-    logger.info(f"Monitoraggio cartella: {watch_folder}")
-
     try:
         while True:
             time.sleep(1)
