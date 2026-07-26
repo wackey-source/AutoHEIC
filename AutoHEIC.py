@@ -22,8 +22,8 @@ def main():
     cfg = load_config()
     set_config(cfg)
 
-if platform.system() == "Windows":
-    start_tray()
+    if platform.system() == "Windows":
+        start_tray()
 
     watch_folder = cfg["watch_folder"]
     delete_original = cfg["delete_original"]

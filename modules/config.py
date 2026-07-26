@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 
 CONFIG_FILE = Path("config.json")
@@ -41,5 +42,9 @@ def load_config() -> dict:
 
     if modified:
         save_config(config)
+
+    config["watch_folder"] = os.path.expandvars(
+        os.path.expanduser(config["watch_folder"])
+    )
 
     return config
