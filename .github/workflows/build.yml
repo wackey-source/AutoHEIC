@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/tray-icon
   workflow_dispatch:
 
 jobs:
@@ -28,12 +29,12 @@ jobs:
       - name: Build EXE
         run: |
           pyinstaller ^
-             --onefile ^
-             --noconsole ^
-             --icon=icons/autoheic.ico ^
-             --add-data "icons;icons" ^
-             --name AutoHEIC ^
-             AutoHEIC.py
+            --onefile ^
+            --noconsole ^
+            --icon=icons/autoheic.ico ^
+            --add-data "icons;icons" ^
+            --name AutoHEIC ^
+            AutoHEIC.py
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
