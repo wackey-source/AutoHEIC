@@ -1,4 +1,5 @@
 import os
+import sys
 import platform
 import threading
 
@@ -11,11 +12,16 @@ from modules.log_manager import logger
 from modules.watcher import convert_existing_files
 
 
-ICON_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)),
-    "icons",
-    "autoheic.ico",
-)
+def resource_path(relative_path):
+    if getattr(sys, "frozen", False):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.dirname(os.path.dirname(__file__))
+
+    return os.path.join(base_path, relative_path)
+
+
+ICON_PATH = resource_path("icons/autoheic.ico")
 
 
 def load_icon():
