@@ -2,7 +2,8 @@
     "watch_folder": "/home/marco/Downloads",
     "output_format": "JPEG",
     "delete_original": true,
-    "quality": 85,
+    "quality": 80,
     "convert_existing": true,
-    "max_width": 2048
+    "max_width": 2048,
+    "max_file_size_kb": 800
 }

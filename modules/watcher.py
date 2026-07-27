@@ -35,7 +35,13 @@ def wait_complete(file_path, timeout=30):
     return False
 
 
-def process_file(file_path, quality, delete_original, max_width):
+def process_file(
+    file_path,
+    quality,
+    delete_original,
+    max_width,
+    max_file_size_kb,
+):
     file_path = os.path.abspath(file_path)
 
     if not file_path.lower().endswith(".heic"):
@@ -50,16 +56,29 @@ def process_file(file_path, quality, delete_original, max_width):
         logger.warning(f"File non ancora completo: {file_path}")
         return
 
-    if convert(file_path, quality, delete_original, max_width):
+    if convert(
+        file_path,
+        quality,
+        delete_original,
+        max_width,
+        max_file_size_kb,
+    ):
         converted_files.add(file_path)
 
 
 class HEICHandler(FileSystemEventHandler):
 
-    def __init__(self, quality, delete_original, max_width):
+    def __init__(
+        self,
+        quality,
+        delete_original,
+        max_width,
+        max_file_size_kb,
+    ):
         self.quality = quality
         self.delete_original = delete_original
         self.max_width = max_width
+        self.max_file_size_kb = max_file_size_kb
 
     def on_created(self, event):
         if not event.is_directory:
@@ -68,6 +87,7 @@ class HEICHandler(FileSystemEventHandler):
                 self.quality,
                 self.delete_original,
                 self.max_width,
+                self.max_file_size_kb,
             )
 
     def on_modified(self, event):
@@ -77,10 +97,17 @@ class HEICHandler(FileSystemEventHandler):
                 self.quality,
                 self.delete_original,
                 self.max_width,
+                self.max_file_size_kb,
             )
 
 
-def convert_existing_files(folder, quality, delete_original, max_width):
+def convert_existing_files(
+    folder,
+    quality,
+    delete_original,
+    max_width,
+    max_file_size_kb,
+):
     logger.info("Controllo file HEIC già presenti...")
 
     found = False
@@ -90,14 +117,26 @@ def convert_existing_files(folder, quality, delete_original, max_width):
             found = True
             file_path = os.path.join(folder, filename)
 
-            if convert(file_path, quality, delete_original, max_width):
+            if convert(
+                file_path,
+                quality,
+                delete_original,
+                max_width,
+                max_file_size_kb,
+            ):
                 converted_files.add(os.path.abspath(file_path))
 
     if not found:
         logger.info("Nessun file HEIC trovato.")
 
 
-def create_observer(folder, quality, delete_original, max_width):
+def create_observer(
+    folder,
+    quality,
+    delete_original,
+    max_width,
+    max_file_size_kb,
+):
     observer = Observer()
 
     observer.schedule(
@@ -105,6 +144,7 @@ def create_observer(folder, quality, delete_original, max_width):
             quality,
             delete_original,
             max_width,
+            max_file_size_kb,
         ),
         folder,
         recursive=False,
